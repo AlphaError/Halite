@@ -45,7 +45,8 @@ public class MyBot {
                             if(gameMap.getSite(new Location(x, y), e).owner != myID &&
                             gameMap.getSite(new Location(x, y), e).strength >= gameMap.getSite(new Location(x, y)).strength) {
                                 e = dNew;
-                                if(gameMap.getSite(new Location(x, y), dNew).strength < gameMap.getSite(new Location(x, y), dOld).strength) {
+                                if(gameMap.getSite(new Location(x, y), dNew).owner != myID && 
+                                gameMap.getSite(new Location(x, y), dNew).strength < gameMap.getSite(new Location(x, y), dOld).strength) {
                                     dOld = dNew;
                                 } //finding the lowest enemy square in the vacinity
                             }
@@ -57,31 +58,31 @@ public class MyBot {
                         }
                         
                         if(hasFriend >= 4) {
-                           Direction eNew = null;
-                           Direction eOld = null;
-                           for(Direction e : Direction.CARDINALS) {
-                               if(gameMap.getSite(new Location(x, y), e).owner == myID &&
-                                  gameMap.getSite(new Location(x, y), e).strength < gameMap.getSite(new Location(x, y)).strength) {
-                                  e = dNew;
-                                 if(gameMap.getSite(new Location(x, y), eNew).strength < gameMap.getSite(new Location(x, y), eOld).strength) {
-                                    eOld = eNew;
+                           Direction fNew = null;
+                           Direction fOld = null;
+                           for(Direction f : Direction.CARDINALS) {
+                               if(gameMap.getSite(new Location(x, y), f).owner == myID &&
+                                  gameMap.getSite(new Location(x, y), f).strength < gameMap.getSite(new Location(x, y)).strength) {
+                                  f = dNew;
+                                 if(gameMap.getSite(new Location(x, y), fNew).strength < gameMap.getSite(new Location(x, y), fOld).strength) {
+                                    fOld = fNew;
                                  } //finding the lowest friendly square in the vacinity
                                }
                            }
-                           if(!movedPiece && gameMap.getSite(new Location(x, y), eOld).strength < gameMap.getSite(new Location(x, y)).strength && 
-                           (gameMap.getSite(new Location(x, y), eOld).strength + gameMap.getSite(new Location(x, y)).strength) < 255) {
+                           if(!movedPiece && gameMap.getSite(new Location(x, y), fOld).strength < gameMap.getSite(new Location(x, y)).strength && 
+                           (gameMap.getSite(new Location(x, y), fOld).strength + gameMap.getSite(new Location(x, y)).strength) < 255) {
                                //if the weakest enemy square is still larger than us we move to it assuming them combined isn't max (using 255 as the maxium stregnth scaling)
-                               moves.add(new Move(new Location(x, y), eOld));
+                               moves.add(new Move(new Location(x, y), fOld));
                                movedPiece = true;
                            }
-                           if(!movedPiece && (gameMap.getSite(new Location(x, y), eOld).strength + gameMap.getSite(new Location(x, y)).strength) >=255) {
+                           if((gameMap.getSite(new Location(x, y), fOld).strength + gameMap.getSite(new Location(x, y)).strength) >=255) {
                                moves.add(new Move(new Location(x, y), Direction.WEST));
                                //making sure that the piece moves in one continuous direction to start attacking pieces
                             }
                         }
                         
                         if(!movedPiece) { // fall back plan
-                            moves.add(new Move(new Location(x, y), Direction.STILL));
+                            moves.add(new Move(new Location(x, y), Direction.NORTH));
                         }
                         
                         
