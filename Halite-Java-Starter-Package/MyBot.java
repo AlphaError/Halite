@@ -68,16 +68,26 @@ public class MyBot {
                                  } //finding the lowest friendly square in the vacinity
                                }
                            }
-                           if(!movedPiece && gameMap.getSite(new Location(x, y), eOld).strength < gameMap.getSite(new Location(x, y)).strength) {
-                               //if the weakest enemy square is still larger than us we stay still
+                           if(!movedPiece && gameMap.getSite(new Location(x, y), eOld).strength < gameMap.getSite(new Location(x, y)).strength && 
+                           (gameMap.getSite(new Location(x, y), eOld).strength + gameMap.getSite(new Location(x, y)).strength) < 255) {
+                               //if the weakest enemy square is still larger than us we move to it assuming them combined isn't max (using 255 as the maxium stregnth scaling)
                                moves.add(new Move(new Location(x, y), eOld));
                                movedPiece = true;
                            }
+                           if(!movedPiece && (gameMap.getSite(new Location(x, y), eOld).strength + gameMap.getSite(new Location(x, y)).strength) >=255) {
+                               moves.add(new Move(new Location(x, y), Direction.WEST));
+                               //making sure that the piece moves in one continuous direction to start attacking pieces
+                            }
                         }
                         
                         if(!movedPiece) { // fall back plan
                             moves.add(new Move(new Location(x, y), Direction.STILL));
                         }
+                        
+                        
+                        //if(movedPiece && gameMap.getSite(new Location(x, y)).strength >= 255) { //fallback #2 for it
+                          //  moves.add(new Move(new Location(x, y), Direction.randomDirection()));
+                        //}
                     }
                 }
             }
