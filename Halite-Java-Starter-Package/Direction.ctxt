@@ -1,0 +1,6 @@
+#BlueJ class context
+comment0.params=value
+comment0.target=Direction\ fromInteger(int)
+comment1.params=
+comment1.target=Direction\ randomDirection()
+numComments=2

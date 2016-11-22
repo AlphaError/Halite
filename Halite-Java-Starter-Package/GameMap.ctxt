@@ -1,0 +1,18 @@
+#BlueJ class context
+comment0.params=
+comment0.target=GameMap()
+comment1.params=width_\ height_
+comment1.target=GameMap(int,\ int)
+comment2.params=loc
+comment2.target=boolean\ inBounds(Location)
+comment3.params=loc1\ loc2
+comment3.target=double\ getDistance(Location,\ Location)
+comment4.params=loc1\ loc2
+comment4.target=double\ getAngle(Location,\ Location)
+comment5.params=loc\ dir
+comment5.target=Location\ getLocation(Location,\ Direction)
+comment6.params=loc\ dir
+comment6.target=Site\ getSite(Location,\ Direction)
+comment7.params=loc
+comment7.target=Site\ getSite(Location)
+numComments=8
