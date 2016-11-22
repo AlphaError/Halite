@@ -57,13 +57,20 @@ public class MyBot {
                         }
                         
                         if(hasFriend >= 4) {
-                           if(!movedPiece && gameMap.getSite(new Location(x, y)).strength < gameMap.getSite(new Location(x, y)).production * 5) {
-                               moves.add(new Move(new Location(x, y), Direction.STILL));
-                               movedPiece = true;
+                           Direction eNew = null;
+                           Direction eOld = null;
+                           for(Direction e : Direction.CARDINALS) {
+                               if(gameMap.getSite(new Location(x, y), e).owner == myID &&
+                                  gameMap.getSite(new Location(x, y), e).strength < gameMap.getSite(new Location(x, y)).strength) {
+                                  e = dNew;
+                                 if(gameMap.getSite(new Location(x, y), eNew).strength < gameMap.getSite(new Location(x, y), eOld).strength) {
+                                    eOld = eNew;
+                                 } //finding the lowest friendly square in the vacinity
+                               }
                            }
-
-                           if(!movedPiece) {
-                               moves.add(new Move(new Location(x, y), rand.nextBoolean() ? Direction.SOUTH : Direction.WEST));
+                           if(!movedPiece && gameMap.getSite(new Location(x, y), eOld).strength < gameMap.getSite(new Location(x, y)).strength) {
+                               //if the weakest enemy square is still larger than us we stay still
+                               moves.add(new Move(new Location(x, y), eOld));
                                movedPiece = true;
                            }
                         }
