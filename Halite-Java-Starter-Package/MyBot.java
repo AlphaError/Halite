@@ -20,7 +20,7 @@ public class MyBot {
                 for(int x = 0; x < gameMap.width; x++) {
                     Site site = gameMap.getSite(new Location(x, y));
                     if(site.owner == myID) {
-
+                        
                         boolean movedPiece = false;
                         int hasFriend = 0;
                         int hasEnemy = 0;
@@ -31,6 +31,7 @@ public class MyBot {
                                 movedPiece = true;
                                 break;
                             }
+                            
                             if(gameMap.getSite(new Location(x, y), d).owner == myID) { //adding counters to calculate the amount of friendly and enemy squares based on the current square
                                 hasFriend += 1;
                             }
@@ -39,7 +40,7 @@ public class MyBot {
                             }
                         }
                         
-                        Direction dNew = null;
+                        Direction dNew = null; //enemy code
                         Direction dOld = null;
                         for(Direction e : Direction.CARDINALS) {
                             if(gameMap.getSite(new Location(x, y), e).owner != myID &&
@@ -57,32 +58,20 @@ public class MyBot {
                             movedPiece = true;
                         }
                         
-                        if(hasFriend >= 4) {
-                           Direction fNew = null;
-                           Direction fOld = null;
-                           for(Direction f : Direction.CARDINALS) {
-                               if(gameMap.getSite(new Location(x, y), f).owner == myID &&
-                                  gameMap.getSite(new Location(x, y), f).strength < gameMap.getSite(new Location(x, y)).strength) {
-                                  f = dNew;
-                                 if(gameMap.getSite(new Location(x, y), fNew).strength < gameMap.getSite(new Location(x, y), fOld).strength) {
-                                    fOld = fNew;
-                                 } //finding the lowest friendly square in the vacinity
-                               }
-                           }
-                           if(!movedPiece && gameMap.getSite(new Location(x, y), fOld).strength < gameMap.getSite(new Location(x, y)).strength && 
-                           (gameMap.getSite(new Location(x, y), fOld).strength + gameMap.getSite(new Location(x, y)).strength) < 255) {
-                               //if the weakest enemy square is still larger than us we move to it assuming them combined isn't max (using 255 as the maxium stregnth scaling)
-                               moves.add(new Move(new Location(x, y), fOld));
+                        if(hasFriend >= 4) { //friendly code
+                            if(!movedPiece && gameMap.getSite(new Location(x, y)).strength < gameMap.getSite(new Location(x, y)).production * 6) {
+                               moves.add(new Move(new Location(x, y), Direction.STILL));
                                movedPiece = true;
-                           }
-                           if((gameMap.getSite(new Location(x, y), fOld).strength + gameMap.getSite(new Location(x, y)).strength) >=255) {
-                               moves.add(new Move(new Location(x, y), Direction.WEST));
-                               //making sure that the piece moves in one continuous direction to start attacking pieces
+                            }
+                            if(!movedPiece) {
+                               moves.add(new Move(new Location(x, y), rand.nextBoolean() ? Direction.SOUTH : Direction.WEST));
+                               movedPiece = true;
                             }
                         }
                         
                         if(!movedPiece) { // fall back plan
-                            moves.add(new Move(new Location(x, y), Direction.NORTH));
+                            moves.add(new Move(new Location(x, y), Direction.STILL));
+                            movedPiece = true;
                         }
                         
                         
