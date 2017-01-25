@@ -3,40 +3,59 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class MyBot {
+    int frameCounter = 0;
+    int oldFrame = 0;
+    int productionCount = 5;
+    
     public static void main(String[] args) throws java.io.IOException {
         InitPackage iPackage = Networking.getInit();
         int myID = iPackage.myID;
         GameMap gameMap = iPackage.map;
 
-        Networking.sendInit("Error Bot");
+        Networking.sendInit("Alpha Bot");
 
         Random rand = new Random();
 
         while(true) {
             ArrayList<Move> moves = new ArrayList<Move>();
-
             gameMap = Networking.getFrame();
-
-            int frameCounter = 0;
-            int productionCount = 5;
-            Direction gameDirection1 = null;
-            Direction gameDirection2 = null;
             for(int y = 0; y < gameMap.height; y++) {
                 for(int x = 0; x < gameMap.width; x++) {
                     Site site = gameMap.getSite(new Location(x, y));
-                    if(site.owner == myID) {
-                        if(frameCounter <= 100) {
+                    if(site.owner == myID) { //general frame analysis for 
+                            Direction gameDirection1 = Direction.NORTH;
+                            Direction gameDirection2 = Direction.EAST;
+                        if(frameCounter <= 80 ) {
                             productionCount = 6;
-                            gameDirection1 = Direction.NORTH;
-                            gameDirection2 = Direction.EAST;
                         }
-                        if(frameCounter > 100 && frameCounter <= 250) {
+                        if(frameCounter > 80 && frameCounter <= 250) {
                             productionCount = 7;
-                            gameDirection1 = Direction.SOUTH;
-                            gameDirection2 = Direction.WEST;
                         }
                         if(frameCounter > 250) {
                             productionCount = 5;
+                        }
+                        if ((oldFrame +  80) <= frameCounter) { //suppesedly changes the random direction in which the particles go every '80'
+                            switch (gameDirection1) { //north --> east, east --> south, south --> west, west --> north
+                                case Direction.NORTH:
+                                    gameDirection1 = Direction.EAST;
+                                case Direction.EAST:
+                                    gameDirection1 = Direction.SOUTH;
+                                case Direcetion.SOUTH:
+                                    gameDirection1 = Direction.WEST;
+                                case Direction.WEST:
+                                    gameDirection1 = Direction.NORTH;
+                            }
+                            switch (gameDirection2) { //north --> east, east --> south, south --> west, west --> north
+                                case Direction.NORTH:
+                                    gameDirection2 = Direction.EAST;
+                                case Direction.EAST:
+                                    gameDirection2 = Direction.SOUTH;
+                                case Direcetion.SOUTH:
+                                    gameDirection2 = Direction.WEST;
+                                case Direction.WEST:
+                                    gameDirection2 = Direction.NORTH;
+                            }
+                            oldFrame = frameCounter;
                         }
                         
                         boolean movedPiece = false;
@@ -76,7 +95,6 @@ public class MyBot {
                             movedPiece = true;
                         }
                         
-                        
                         //Direction fNew = null;
                         int numToEnemy = 0;
                         int lastNumEnemy = 0;
@@ -92,12 +110,12 @@ public class MyBot {
                                 Location newLoc = new Location(x, y);
                                 for (int a = 0; arrayCount >= a; a++) {
                                     newLoc = gameMap.getSite(new Location(x, y), dirs[a]);
-                                }
                                     while(gameMap.getSite(new Location(x, y), newLoc).owner == myID) {
                                        dirs.add(f); //adding 1 more move in that direction...?
                                        arrayCount += 1;
                                        numToEnemy += 1;
                                     }
+                                }
                                 if (numEnemyCount < 1) {
                                     lastNumEnemy = numToEnemy; //factoring in for the very first instance of the fNew
                                 }
@@ -106,6 +124,7 @@ public class MyBot {
                                     bestF = f; //setting the direction
                                 }
                             }
+                            
                             if(!movedPiece && gameMap.getSite(new Location(x, y)).strength < gameMap.getSite(new Location(x, y)).production * productionCount) {
                                moves.add(new Move(new Location(x, y), Direction.STILL));
                                movedPiece = true;
@@ -121,7 +140,6 @@ public class MyBot {
                             moves.add(new Move(new Location(x, y), Direction.STILL));
                             movedPiece = true;
                         }
-                        
                         
                         //if(movedPiece && gameMap.getSite(new Location(x, y)).strength >= 255) { //fallback #2 for it
                           //  moves.add(new Move(new Location(x, y), Direction.randomDirection()));
