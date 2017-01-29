@@ -2,6 +2,15 @@
 import java.util.ArrayList;
 import java.util.Random;
 
+/*
+ * Strategies:
+ * * tunnel through enemies
+ * * collect reasources around players
+ * * p view --> tunnel to high production places
+ * * * early vs. mid vs. end/late game
+ * * 255 strength 
+ */
+
 public class MyBot {
     public static void main(String[] args) throws java.io.IOException {
         InitPackage iPackage = Networking.getInit();
@@ -98,10 +107,6 @@ public class MyBot {
                             movedPiece = true;
                         }
                         
-                        //Direction fNew = null;
-                        int numToEnemy = 0;
-                        int lastNumEnemy = 0;
-                        int numEnemyCount = 0;
                         Direction bestF = Direction.STILL;
                         if(hasFriend >= 4) { //friendly code
                             // for each direction
@@ -110,12 +115,11 @@ public class MyBot {
                                 // compare that to the best number of moves
                                 // store the best direction
                             // move in the best direction
-                            int bestNumberOfMoves = 1000;
-                      
+                            int bestNumberOfMoves = Integer.MAX_VALUE;
                             for (Direction f : Direction.CARDINALS) {
                                 int currentNumberOfMoves = 1;
                                 Location current = gameMap.getLocation(new Location(x, y), f);
-                                while (current.x != x && current.y != y) {
+                                while (currentNumberOfMoves < gameMap.width || currentNumberOfMoves < gameMap.height) {
                                     if (gameMap.getSite(current).owner != myID) {
                                         if (currentNumberOfMoves < bestNumberOfMoves) {
                                             bestNumberOfMoves = currentNumberOfMoves;
@@ -126,24 +130,6 @@ public class MyBot {
                                     current = gameMap.getLocation(current, f);
                                     currentNumberOfMoves++;
                                 }
-                                
-                                
-                                /*ArrayList<Direction> dirs = new ArrayList<Direction>();
-                                dirs.add(f);
-                                int dirsSize = dirs.size();
-                                for (int a = 0; dirsSize >= a; a++) {
-                                    if(gameMap.getSite(new Location(x, y), dirs.get(a)).owner == myID) {
-                                       dirs.add(f); //adding 1 more move in that direction then rechecking for an enemy
-                                    }
-                                }
-                                numToEnemy = dirs.size(); //for clarity
-                                if (numEnemyCount < 1) {
-                                    lastNumEnemy = numToEnemy; //factoring in for the very first instance of the fNew
-                                }
-                                if (numEnemyCount >= 1 && numToEnemy < lastNumEnemy) {
-                                    lastNumEnemy = numToEnemy; //making sure the variable will be at it's lowest for the next loop
-                                    bestF = f; //setting the direction
-                                }*/
                             }
                             
                             if(!movedPiece && gameMap.getSite(new Location(x, y)).strength <
