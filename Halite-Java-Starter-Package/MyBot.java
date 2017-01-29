@@ -9,6 +9,7 @@ import java.util.Random;
  * * p view --> tunnel to high production places
  * * * early vs. mid vs. end/late game
  * * 255 strength 
+ * * field id = 0
  */
 
 public class MyBot {
@@ -20,6 +21,7 @@ public class MyBot {
         Networking.sendInit("Alpha Bot");
 
         Random rand = new Random();
+        Direction moveDirection = null;
         int frameCounter = 0;
         int oldFrame = 0;
         int productionCount = 5;
@@ -77,6 +79,7 @@ public class MyBot {
                             if(gameMap.getSite(new Location(x, y), d).owner != myID &&
                             gameMap.getSite(new Location(x, y), d).strength < gameMap.getSite(new Location(x, y)).strength) {
                                 moves.add(new Move(new Location(x, y), d));
+                                moveDirection = d;
                                 movedPiece = true;
                                 break;
                             }
@@ -104,7 +107,12 @@ public class MyBot {
                         if(!movedPiece && gameMap.getSite(new Location(x, y), dOld).strength > gameMap.getSite(new Location(x, y)).strength) {
                             //if the weakest enemy square is still larger than us we stay still
                             moves.add(new Move(new Location(x, y), Direction.STILL));
+                            moveDirection = Direction.STILL;
                             movedPiece = true;
+                        }
+                        
+                        if(hasFriend > 0 && hasFriend < 4) {
+                            //early game code for combination attack
                         }
                         
                         Direction bestF = Direction.STILL;
@@ -135,13 +143,15 @@ public class MyBot {
                             if(!movedPiece && gameMap.getSite(new Location(x, y)).strength < 
                             gameMap.getSite(new Location(x, y)).production * productionCount && gameMap.getSite(new Location(x, y)).production > 0) {
                                moves.add(new Move(new Location(x, y), Direction.STILL));
+                               moveDirection = Direction.STILL;
                                movedPiece = true;
                             }
-                            else if(!movedPiece && bestF != Direction.STILL) {
+                            else if(!movedPiece && bestF != Direction.STILL) { //if should move but not still
                                moves.add(new Move(new Location(x, y), bestF));
+                               moveDirection = bestF;
                                movedPiece = true;
                             }
-                            else if(!movedPiece) {
+                            else if(!movedPiece) { //random thing that changes every so often ^
                                 moves.add(new Move(new Location(x, y), rand.nextBoolean() ? gameDirection1 : gameDirection2));
                                 movedPiece = true;
                             }
@@ -149,7 +159,17 @@ public class MyBot {
                         
                         if(!movedPiece) { // fall back plan
                             moves.add(new Move(new Location(x, y), Direction.STILL));
+                            moveDirection = Direction.STILL;
                             movedPiece = true;
+                        }
+                        
+                        for (Direction g : Direction.CARDINALS) {
+                            if (gameMap.getSite(new Location(x, y), moveDirection).owner == 0) { //if moving location is field
+                                Location moving = gameMap.getLocation(new Location(x, y), moveDirection);
+                                if (gameMap.getSite(new Location(moving), g).owner != 0 && gameMap.getSite(new Location(moving), g).owner != myID) {
+                                    moves.add(new Move(new Location(x, y), Direction.STILL)); //non aggression pact trial 1
+                                }
+                            }
                         }
                         
                         if (movedPiece) {
