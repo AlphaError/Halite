@@ -132,15 +132,18 @@ public class MyBot {
                                 }
                             }
                             
-                            if(!movedPiece && gameMap.getSite(new Location(x, y)).strength <
-                            gameMap.getSite(new Location(x, y)).production * productionCount) {
+                            if(!movedPiece && gameMap.getSite(new Location(x, y)).strength < 
+                            gameMap.getSite(new Location(x, y)).production * productionCount && gameMap.getSite(new Location(x, y)).production > 0) {
                                moves.add(new Move(new Location(x, y), Direction.STILL));
                                movedPiece = true;
                             }
-                            else if(!movedPiece) {
-                               //moves.add(new Move(new Location(x, y), rand.nextBoolean() ? gameDirection1 : gameDirection2));
+                            else if(!movedPiece && bestF != Direction.STILL) {
                                moves.add(new Move(new Location(x, y), bestF));
                                movedPiece = true;
+                            }
+                            else if(!movedPiece) {
+                                moves.add(new Move(new Location(x, y), rand.nextBoolean() ? gameDirection1 : gameDirection2));
+                                movedPiece = true;
                             }
                         }
                         
