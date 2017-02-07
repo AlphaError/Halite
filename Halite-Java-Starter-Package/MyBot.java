@@ -92,6 +92,28 @@ public class MyBot {
                             }
                         }
                         
+                        if(hasFriend == 1) {
+                            //early game code for combination attack
+                            for (Direction h : Direction.CARDINALS) { //for directions
+                                if (gameMap.getSite(new Location(x, y), h).owner == myID) { //check and save friendly square
+                                    Location friendly = gameMap.getLocation(new Location(x, y), h);
+                                    for (Direction i : Direction.CARDINALS) { //for the directions around the friendly square
+                                        if (gameMap.getSite(new Location(friendly), i).owner != myID && gameMap.getSite(new Location(friendly), i).strength <
+                                        (gameMap.getSite(new Location(x, y)).strength + gameMap.getSite(new Location(friendly)).strength)) {
+                                            //check if the an enemy square's strength is less than the frienly square + current moving square
+                                            moves.add(new Move(new Location(x, y), h));
+                                            moveDirection = h;
+                                            movedPiece = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if(hasFriend == 2 || hasFriend == 3) {
+                            //early game code for combination attack
+                            
+                        }
+                        
                         Direction dNew = null; //enemy code
                         Direction dOld = null;
                         for(Direction e : Direction.CARDINALS) {
@@ -110,11 +132,7 @@ public class MyBot {
                             moveDirection = Direction.STILL;
                             movedPiece = true;
                         }
-                        
-                        if(hasFriend > 0 && hasFriend < 4) {
-                            //early game code for combination attack
-                        }
-                        
+
                         Direction bestF = Direction.STILL;
                         if(hasFriend >= 4) { //friendly code
                             // for each direction
@@ -163,15 +181,20 @@ public class MyBot {
                             movedPiece = true;
                         }
                         
+                        Location moving = gameMap.getLocation(new Location(x, y), moveDirection); //start of checking move code
                         for (Direction g : Direction.CARDINALS) {
                             if (gameMap.getSite(new Location(x, y), moveDirection).owner == 0) { //if moving location is field
-                                Location moving = gameMap.getLocation(new Location(x, y), moveDirection);
                                 if (gameMap.getSite(new Location(moving), g).owner != 0 && gameMap.getSite(new Location(moving), g).owner != myID) {
                                     moves.add(new Move(new Location(x, y), Direction.STILL)); //non aggression pact trial 1
                                 }
                             }
                         }
-                        
+                        int strengthLoss = 75; //allowance level of strength losted due to cap per particle (about 30%)
+                        if (moveDirection != Direction.STILL && gameMap.getSite(new Location(moving)).owner == myID &&
+                           (gameMap.getSite(new Location(moving)).strength + gameMap.getSite(new Location(x, y)).strength) > (255 + strengthLoss)) {
+                            moves.add(new Move(new Location(x, y), Direction.STILL)); //stays still until 
+                        }
+
                         if (movedPiece) {
                             frameCounter += 1;
                         }
