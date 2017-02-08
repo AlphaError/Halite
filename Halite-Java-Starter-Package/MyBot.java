@@ -97,13 +97,14 @@ public class MyBot {
                             //early game code for combination attack
                             for (Direction h : Direction.CARDINALS) { //for directions
                                 if (gameMap.getSite(new Location(x, y), h).owner == myID && gameMap.getSite(new Location(x, y), h).strength
-                                >= gameMap.getSite(new Location(x, y)).strength) { //check and save friendly square
+                                >= gameMap.getSite(new Location(x, y)).strength) { //check and save friendly square that is highter than current square
                                     Location friendly = gameMap.getLocation(new Location(x, y), h);
                                     for (Direction i : Direction.CARDINALS) { //for the directions around the friendly square
                                         if (gameMap.getSite(new Location(friendly), i).owner != myID && gameMap.getSite(new Location(friendly), i).strength <
                                         (gameMap.getSite(new Location(x, y)).strength + gameMap.getSite(new Location(friendly)).strength) &&
                                         (gameMap.getSite(new Location(friendly)).strength + gameMap.getSite(new Location(x, y)).strength) <= (255 + strengthLoss)) {
                                             //check if the an enemy square's strength is less than the frienly square + current moving square
+                                            ////and not too much strength was lsot to cap
                                             moves.add(new Move(new Location(x, y), h));
                                             moveDirection = h;
                                             movedPiece = true;
@@ -115,9 +116,9 @@ public class MyBot {
                         if(hasFriend == 2 || hasFriend == 3) {
                             //early game code for combination attack
                             Direction bestD = null;
+                            int progressionCount = 0;
                             for(Direction j : Direction.CARDINALS) {
                                 Location current = gameMap.getLocation(new Location(x, y), j);
-                                int progressionCount = 0;
                                 if (gameMap.getSite(new Location(current)).owner == myID && (gameMap.getSite(new Location(current)).strength +
                                 gameMap.getSite(new Location(x, y)).strength) <= (255 + strengthLoss) && 
                                 gameMap.getSite(new Location(x, y), j).strength >= gameMap.getSite(new Location(x, y)).strength) {
