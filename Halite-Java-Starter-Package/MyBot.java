@@ -122,15 +122,24 @@ public class MyBot {
                                 if (gameMap.getSite(new Location(current)).owner == myID && (gameMap.getSite(new Location(current)).strength +
                                 gameMap.getSite(new Location(x, y)).strength) <= (255 + strengthLoss) && 
                                 gameMap.getSite(new Location(x, y), j).strength >= gameMap.getSite(new Location(x, y)).strength) {
+                                    //checks if location is friendly
                                     if (progressionCount == 0) {
                                         bestD = j;
                                     }
-                                    else{
-                                        if (gameMap.getSite(new Location(current)).strength >= gameMap.getSite(new Location(x, y), bestD).strength) {
-                                            bestD = j;
-                                        }
+                                    else if (gameMap.getSite(new Location(current)).strength >= gameMap.getSite(new Location(x, y), bestD).strength){
+                                        bestD = j; //direction of optimal friendly square --> largest that doesn't loss too much from cap
                                     }
                                     progressionCount += 1;
+                                }
+                            }
+                            for(Direction k : Direction.CARDINALS) {
+                                Location bestC = gameMap.getLocation(new Location(x, y), bestD);
+                                if((gameMap.getSite(new Location(x, y), bestD).strength + gameMap.getSite(new Location(x, y)).strength) >
+                                gameMap.getSite(new Location(bestC), k).strength || 
+                                (gameMap.getSite(new Location(x, y), bestD).strength + gameMap.getSite(new Location(x, y)).strength)>= 255) {
+                                    moves.add(new Move(new Location(x, y), bestD));
+                                    moveDirection = bestD;
+                                    movedPiece = true;
                                 }
                             }
                         }
