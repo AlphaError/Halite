@@ -32,6 +32,7 @@ public class MyBot {
                 for(int x = 0; x < gameMap.width; x++) {
                     Site site = gameMap.getSite(new Location(x, y));
                     if(site.owner == myID) { //general frame analysis for 
+                        int strengthLoss = 75; //allowance level of strength losted due to cap per particle (about 30%)
                             Direction gameDirection1 = Direction.NORTH;
                             Direction gameDirection2 = Direction.EAST;
                         if(frameCounter <= 80 ) {
@@ -111,7 +112,23 @@ public class MyBot {
                         }
                         if(hasFriend == 2 || hasFriend == 3) {
                             //early game code for combination attack
-                            
+                            Direction bestD = null;
+                            for(Direction j : Direction.CARDINALS) {
+                                Location current = gameMap.getLocation(new Location(x, y), j);
+                                int progressionCount = 0;
+                                if (gameMap.getSite(new Location(current)).owner == myID &&
+                                (gameMap.getSite(new Location(current)).strength + gameMap.getSite(new Location(x, y)).strength) <= (255 + strengthLoss)) {
+                                    if (progressionCount == 0) {
+                                        bestD = j;
+                                    }
+                                    else{
+                                        if (gameMap.getSite(new Location(current)).strength >= gameMap.getSite(new Location(x, y), bestD).strength) {
+                                            bestD = j;
+                                        }
+                                    }
+                                    progressionCount += 1;
+                                }
+                            }
                         }
                         
                         Direction dNew = null; //enemy code
@@ -189,7 +206,7 @@ public class MyBot {
                                 }
                             }
                         }
-                        int strengthLoss = 75; //allowance level of strength losted due to cap per particle (about 30%)
+                        
                         if (moveDirection != Direction.STILL && gameMap.getSite(new Location(moving)).owner == myID &&
                            (gameMap.getSite(new Location(moving)).strength + gameMap.getSite(new Location(x, y)).strength) > (255 + strengthLoss)) {
                             moves.add(new Move(new Location(x, y), Direction.STILL)); //stays still until 
