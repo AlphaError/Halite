@@ -1,6 +1,0 @@
-#BlueJ class context
-comment0.params=x_\ y_
-comment0.target=Location(int,\ int)
-comment1.params=l
-comment1.target=Location(Location)
-numComments=2
