@@ -8,13 +8,13 @@ public class MyBot {
         final Networking networking = new Networking();
         final GameMap gameMap = networking.initialize("Tamagocchi");
 
-        final ArrayList<Move> moveList = new ArrayList<>();
+        final ArrayList<Move> moveList = new ArrayList<>(); //list of moves
         for (;;) {
-            moveList.clear();
+            moveList.clear(); //clears list
             gameMap.updateMap(Networking.readLineIntoMetadata());
 
-            for (final Ship ship : gameMap.getMyPlayer().getShips().values()) {
-                if (ship.getDockingStatus() != Ship.DockingStatus.Undocked) {
+            for (final Ship ship : gameMap.getMyPlayer().getShips().values()) { //for each ship value
+                if (ship.getDockingStatus() != Ship.DockingStatus.Undocked) { //stored into ship
                     continue;
                 }
 
@@ -23,7 +23,7 @@ public class MyBot {
                         continue;
                     }
 
-                    if (ship.canDock(planet)) {
+                    if (ship.canDock(planet)) { //always doc at a planet
                         moveList.add(new DockMove(ship, planet));
                         break;
                     }

@@ -46,7 +46,7 @@ public class GameMap {
         return playersUnmodifiable;
     }
 
-    public Player getMyPlayer() {
+    public Player getMyPlayer() { //returns the location of all players with my id
         return getAllPlayers().get(getMyPlayerId());
     }
 

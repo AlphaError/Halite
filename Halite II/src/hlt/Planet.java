@@ -42,7 +42,7 @@ public class Planet extends Entity {
         return dockedShips.size() == dockingSpots;
     }
 
-    public boolean isOwned() {
+    public boolean isOwned() { //true if its me
         return getOwner() != -1;
     }
 
