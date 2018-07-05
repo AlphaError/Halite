@@ -1,0 +1,100 @@
+[
+ {
+  "Error": {},
+  "Frames": [
+   {
+    "Time": 484,
+    "Turn": 0
+   },
+   {
+    "Commands": [
+     {
+      "angle": 18,
+      "magnitude": 4,
+      "owner": 0,
+      "queue_number": 0,
+      "shipId": 0,
+      "type": "thrust"
+     },
+     {
+      "angle": 20,
+      "magnitude": 4,
+      "owner": 0,
+      "queue_number": 0,
+      "shipId": 1,
+      "type": "thrust"
+     },
+     {
+      "angle": 15,
+      "magnitude": 4,
+      "owner": 0,
+      "queue_number": 0,
+      "shipId": 2,
+      "type": "thrust"
+     }
+    ],
+    "Planets": null,
+    "Ships": [
+     {
+      "cooldown": 0,
+      "docking": {
+       "status": "undocked"
+      },
+      "health": 255,
+      "id": 0,
+      "owner": 0,
+      "vel_x": 0.0,
+      "vel_y": 0.0,
+      "x": 81.8042260651806,
+      "y": 105.2360679775
+     },
+     {
+      "cooldown": 0,
+      "docking": {
+       "status": "undocked"
+      },
+      "health": 255,
+      "id": 1,
+      "owner": 0,
+      "vel_x": 0.0,
+      "vel_y": 0.0,
+      "x": 81.7587704831436,
+      "y": 102.368080573303
+     },
+     {
+      "cooldown": 0,
+      "docking": {
+       "status": "undocked"
+      },
+      "health": 255,
+      "id": 2,
+      "owner": 0,
+      "vel_x": 0.0,
+      "vel_y": 0.0,
+      "x": 81.8637033051563,
+      "y": 108.03527618041
+     }
+    ],
+    "Time": 12,
+    "Turn": 1
+   }
+  ],
+  "PlayerID": 0,
+  "PlayerName": "Tester"
+ },
+ {
+  "Error": {
+   "Message": "ERRORED! Response received (if any): ",
+   "Turn": 1
+  },
+  "Frames": [
+   {
+    "Time": 248,
+    "Turn": 0
+   },
+   null
+  ],
+  "PlayerID": 1,
+  "PlayerName": "python: can't open file 'Kappa"
+ }
+]

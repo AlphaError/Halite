@@ -1,0 +1,32 @@
+[
+ {
+  "Error": {
+   "Message": "ERRORED! Response received (if any): ",
+   "Turn": 1
+  },
+  "Frames": [
+   {
+    "Time": 40,
+    "Turn": 0
+   },
+   null
+  ],
+  "PlayerID": 0,
+  "PlayerName": "python: can't open file 'Alpha"
+ },
+ {
+  "Error": {
+   "Message": "ERRORED! Response received (if any): ",
+   "Turn": 1
+  },
+  "Frames": [
+   {
+    "Time": 28,
+    "Turn": 0
+   },
+   null
+  ],
+  "PlayerID": 1,
+  "PlayerName": "python: can't open file 'Gamma"
+ }
+]
